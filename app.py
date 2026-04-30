@@ -1,5 +1,5 @@
 """
-Parkzy – Streamlit Presentation App
+Parkzy – Streamlit Demo  (dark AI startup edition)
 Run: streamlit run app.py
 """
 
@@ -9,419 +9,553 @@ sys.path.insert(0, os.path.dirname(__file__))
 import streamlit as st
 import pandas as pd
 import numpy as np
-from datetime import datetime
 
 from pricing_engine import (
-    ParkSharePricer,
-    fetch_upcoming_events,
-    homeowner_alerts,
-    LA_METER_RATES,
-    base_price,
+    ParkSharePricer, fetch_upcoming_events,
+    homeowner_alerts, LA_METER_RATES,
 )
 
-# ─── page config ───────────────────────────────────────────────────────────────
-st.set_page_config(
-    page_title="Parkzy",
-    page_icon="🅿️",
-    layout="wide",
-    initial_sidebar_state="collapsed",
-)
+# ── page config ────────────────────────────────────────────────────────────────
+st.set_page_config(page_title="Parkzy", page_icon="🅿️",
+                   layout="wide", initial_sidebar_state="collapsed")
 
-# ─── custom CSS ───────────────────────────────────────────────────────────────
+# ── CSS ────────────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-    /* cleaner font and background */
-    html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
-    .block-container { padding-top: 2rem; padding-bottom: 2rem; max-width: 1100px; }
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
 
-    /* metric cards */
-    [data-testid="metric-container"] {
-        background: #f8f9fb;
-        border: 1px solid #e8eaed;
-        border-radius: 12px;
-        padding: 1rem 1.2rem;
-    }
-    [data-testid="metric-container"] label { color: #666; font-size: 0.8rem; }
-    [data-testid="metric-container"] [data-testid="stMetricValue"] {
-        font-size: 1.6rem; font-weight: 700; color: #1a1a2e;
-    }
+/* ── reset & base ── */
+html, body, [class*="css"] {
+    font-family: 'DM Sans', sans-serif;
+    background-color: #080b14 !important;
+    color: #e2e8f0 !important;
+}
+.block-container {
+    padding-top: 1.8rem !important;
+    padding-bottom: 2rem !important;
+    max-width: 1120px !important;
+    background: transparent !important;
+}
+section[data-testid="stSidebar"] { background: #0d1117 !important; }
 
-    /* big price display */
-    .big-price {
-        font-size: 3.5rem; font-weight: 800; color: #2563eb;
-        line-height: 1.1; margin: 0.5rem 0;
-    }
-    .price-label { font-size: 0.9rem; color: #888; margin-bottom: 0.2rem; }
+/* ── scrollbar ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #0d1117; }
+::-webkit-scrollbar-thumb { background: #2a3550; border-radius: 4px; }
 
-    /* section cards */
-    .card {
-        background: white; border: 1px solid #e8eaed;
-        border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem;
-        color: #1a1a2e;
-    }
-    .card h4 { color: #1a1a2e; margin-bottom: 0.5rem; }
-    .card p, .card li { color: #374151; }
-    .card strong { color: #1a1a2e; }
-    .card ul { padding-left: 1.2rem; }
-    .notif-high strong, .notif-high span { color: #1a1a2e; }
-    .notif-med strong, .notif-med span { color: #1a1a2e; }
+/* ── logo / header ── */
+.park-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem; font-weight: 800;
+    background: linear-gradient(135deg, #38bdf8 0%, #818cf8 60%, #e879f9 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: -0.03em; line-height: 1;
+}
+.park-tagline {
+    font-size: 0.82rem; color: #475569; letter-spacing: 0.06em;
+    text-transform: uppercase; margin-top: 2px;
+}
 
-    /* pill badges */
-    .badge-green { background:#dcfce7; color:#166534; padding:3px 10px; border-radius:20px; font-size:0.78rem; font-weight:600; }
-    .badge-orange { background:#fff7ed; color:#9a3412; padding:3px 10px; border-radius:20px; font-size:0.78rem; font-weight:600; }
-    .badge-blue { background:#eff6ff; color:#1d4ed8; padding:3px 10px; border-radius:20px; font-size:0.78rem; font-weight:600; }
+/* ── tabs ── */
+[data-baseweb="tab-list"] {
+    background: #0d1420 !important;
+    border-radius: 12px !important;
+    padding: 4px !important;
+    border: 1px solid #1e2d45 !important;
+    gap: 2px !important;
+}
+button[data-baseweb="tab"] {
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.85rem !important; font-weight: 500 !important;
+    color: #64748b !important;
+    border-radius: 8px !important;
+    padding: 0.45rem 1.1rem !important;
+    transition: all 0.2s !important;
+}
+button[data-baseweb="tab"]:hover { color: #94a3b8 !important; background: #131d2e !important; }
+button[data-baseweb="tab"][aria-selected="true"] {
+    background: linear-gradient(135deg, #1e3a5f, #1a2744) !important;
+    color: #38bdf8 !important;
+    border: 1px solid #2563eb44 !important;
+}
 
-    /* tab styling */
-    button[data-baseweb="tab"] { font-size: 0.9rem; font-weight: 500; }
-    button[data-baseweb="tab"][aria-selected="true"] { color: #2563eb; }
+/* ── glass card ── */
+.gcard {
+    background: linear-gradient(135deg, #0d1928 0%, #0a1520 100%);
+    border: 1px solid #1e2d45;
+    border-radius: 16px;
+    padding: 1.4rem 1.6rem;
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.gcard::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, #38bdf822, #818cf833, transparent);
+}
+.gcard h4 {
+    font-family: 'Syne', sans-serif;
+    color: #e2e8f0; font-size: 1rem; font-weight: 700;
+    margin: 0 0 0.6rem 0; letter-spacing: -0.01em;
+}
+.gcard p, .gcard li { color: #94a3b8; font-size: 0.9rem; line-height: 1.65; margin: 0 0 0.5rem 0; }
+.gcard strong { color: #cbd5e1; }
+.gcard ul { padding-left: 1.2rem; }
+.gcard .sub { color: #475569; font-size: 0.8rem; margin-top: 0.4rem; }
 
-    /* notification cards */
-    .notif-high { background:#fff1f0; border-left:4px solid #ef4444; border-radius:8px; padding:1rem; margin:0.5rem 0; }
-    .notif-med  { background:#fffbeb; border-left:4px solid #f59e0b; border-radius:8px; padding:1rem; margin:0.5rem 0; }
+/* ── kpi card ── */
+.kpi {
+    background: linear-gradient(135deg, #0d1928, #0a1520);
+    border: 1px solid #1e2d45;
+    border-radius: 14px; padding: 1.1rem 1.3rem;
+    position: relative; overflow: hidden;
+}
+.kpi::after {
+    content: ''; position: absolute;
+    bottom: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, #38bdf8, #818cf8);
+    opacity: 0.5;
+}
+.kpi-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.9rem; font-weight: 800; color: #f1f5f9;
+    line-height: 1.1; letter-spacing: -0.03em;
+}
+.kpi-label { font-size: 0.75rem; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+.kpi-delta { font-size: 0.78rem; color: #34d399; margin-top: 3px; }
 
-    /* hide streamlit branding */
-    #MainMenu, footer { visibility: hidden; }
+/* ── big price ── */
+.big-price {
+    font-family: 'Syne', sans-serif;
+    font-size: 4rem; font-weight: 800; letter-spacing: -0.04em;
+    background: linear-gradient(135deg, #38bdf8, #818cf8);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    line-height: 1;
+}
+.price-unit { font-size: 1.1rem; color: #475569; font-weight: 400; }
+.price-label { font-size: 0.75rem; color: #475569; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
 
-    /* mode toggle */
-    .mode-box { background:#f1f5f9; border-radius:12px; padding:1rem 1.2rem; margin-bottom:1rem; }
+/* ── badges ── */
+.badge {
+    display: inline-block; padding: 3px 11px;
+    border-radius: 20px; font-size: 0.75rem; font-weight: 600;
+    letter-spacing: 0.02em;
+}
+.badge-cyan   { background: #0e2a3a; color: #38bdf8; border: 1px solid #38bdf822; }
+.badge-green  { background: #052e16; color: #34d399; border: 1px solid #34d39922; }
+.badge-orange { background: #2d1a05; color: #fb923c; border: 1px solid #fb923c22; }
+.badge-red    { background: #2d0505; color: #f87171; border: 1px solid #f8717122; }
+.badge-purple { background: #1a1033; color: #a78bfa; border: 1px solid #a78bfa22; }
+
+/* ── section title ── */
+.sec-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.35rem; font-weight: 700; color: #e2e8f0;
+    letter-spacing: -0.02em; margin-bottom: 2px;
+}
+.sec-sub { font-size: 0.82rem; color: #475569; margin-bottom: 1.2rem; }
+
+/* ── divider ── */
+.glowdiv {
+    height: 1px; margin: 1.2rem 0;
+    background: linear-gradient(90deg, transparent, #1e3a5f, transparent);
+}
+
+/* ── event card ── */
+.evcard {
+    background: #0d1928; border: 1px solid #1e2d45;
+    border-radius: 14px; padding: 1rem 1.1rem;
+    transition: border-color 0.2s;
+}
+.evcard-hot  { border-color: #ef444433 !important; background: #1a0a0a !important; }
+.evcard-warm { border-color: #f59e0b33 !important; background: #1a1205 !important; }
+.evcard-cool { border-color: #38bdf833 !important; }
+.evcard-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.92rem; color: #e2e8f0; margin: 0 0 4px 0; }
+.evcard-meta { font-size: 0.78rem; color: #475569; margin: 1px 0; }
+
+/* ── notif ── */
+.notif {
+    border-radius: 12px; padding: 1rem 1.2rem; margin: 0.5rem 0;
+    border-left: 3px solid;
+}
+.notif-high { background: #1a0a0a; border-color: #ef4444; }
+.notif-med  { background: #1a1205; border-color: #f59e0b; }
+.notif strong { color: #e2e8f0; font-family: 'Syne', sans-serif; }
+.notif span   { color: #94a3b8; font-size: 0.88rem; }
+
+/* ── streamlit overrides ── */
+[data-testid="metric-container"] {
+    background: #0d1928 !important;
+    border: 1px solid #1e2d45 !important;
+    border-radius: 12px !important; padding: 1rem 1.2rem !important;
+}
+[data-testid="metric-container"] label { color: #475569 !important; font-size: 0.75rem !important; }
+[data-testid="stMetricValue"]          { color: #e2e8f0 !important; font-family: 'Syne', sans-serif !important; font-size: 1.5rem !important; }
+[data-testid="stMetricDelta"]          { color: #34d399 !important; }
+[data-testid="stDataFrame"]            { background: #0d1928 !important; border-radius: 12px !important; }
+div[data-testid="stDataFrameResizable"] > div { background: #0d1928 !important; }
+.stDataFrame th { background: #131d2e !important; color: #64748b !important; font-size: 0.78rem !important; }
+.stDataFrame td { color: #94a3b8 !important; font-size: 0.85rem !important; }
+
+/* inputs */
+div[data-baseweb="select"] > div,
+div[data-baseweb="input"] > div { background: #0d1928 !important; border-color: #1e2d45 !important; color: #e2e8f0 !important; border-radius: 10px !important; }
+label[data-testid="stWidgetLabel"] p { color: #64748b !important; font-size: 0.8rem !important; }
+.stSlider [data-testid="stTickBarMin"], .stSlider [data-testid="stTickBarMax"] { color: #475569 !important; }
+.stSlider div[role="slider"] { background: #38bdf8 !important; }
+div[data-baseweb="radio"] label p { color: #94a3b8 !important; }
+
+/* buttons */
+.stButton > button {
+    background: linear-gradient(135deg, #1e3a5f, #1e2d5f) !important;
+    color: #38bdf8 !important; border: 1px solid #2563eb44 !important;
+    border-radius: 10px !important; font-family: 'DM Sans', sans-serif !important;
+    font-weight: 500 !important; transition: all 0.2s !important;
+}
+.stButton > button:hover {
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    color: white !important; border-color: transparent !important;
+    transform: translateY(-1px) !important;
+}
+.stButton > button[kind="primary"] {
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    color: white !important; border: none !important;
+}
+.stButton > button[kind="primary"]:hover { opacity: 0.9 !important; }
+
+/* progress bar */
+.stProgress > div > div { background: linear-gradient(90deg, #38bdf8, #818cf8) !important; }
+
+/* info / success */
+.stAlert { background: #0d1928 !important; border-radius: 12px !important; border-color: #1e2d45 !important; color: #94a3b8 !important; }
+
+/* hide branding */
+#MainMenu, footer, header { visibility: hidden !important; }
 </style>
 """, unsafe_allow_html=True)
 
-# ─── init ─────────────────────────────────────────────────────────────────────
+# ── init ──────────────────────────────────────────────────────────────────────
 @st.cache_resource
 def get_pricer():
-    p = ParkSharePricer(model_dir="/tmp/parkzy_models")
+    p = ParkSharePricer(model_dir="/tmp/parkzy_v2")
     p.simulate_rl_training(n=300)
     return p
 
 pricer = get_pricer()
 
-# ─── header ───────────────────────────────────────────────────────────────────
-col_logo, col_tagline = st.columns([1, 3])
-with col_logo:
-    st.markdown("## 🅿️ Parkzy")
-with col_tagline:
-    st.markdown("<p style='padding-top:0.6rem; color:#888; font-size:0.95rem;'>Airbnb for parking · Inglewood & USC · Powered by ML</p>", unsafe_allow_html=True)
+# ── header ────────────────────────────────────────────────────────────────────
+c1, c2 = st.columns([1, 4])
+with c1:
+    st.markdown("<div class='park-logo'>🅿 Parkzy</div><div class='park-tagline'>Inglewood · USC · AI-powered parking</div>", unsafe_allow_html=True)
+with c2:
+    st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+    b1, b2, b3, b4 = st.columns(4)
+    b1.markdown("<div class='kpi'><div class='kpi-label'>Drivers searching</div><div class='kpi-val'>247</div><div class='kpi-delta'>↑ 18 this hour</div></div>", unsafe_allow_html=True)
+    b2.markdown("<div class='kpi'><div class='kpi-label'>Spots listed</div><div class='kpi-val'>34</div><div class='kpi-delta'>↑ 6 today</div></div>", unsafe_allow_html=True)
+    b3.markdown("<div class='kpi'><div class='kpi-label'>Avg price / hr</div><div class='kpi-val'>$4.20</div><div class='kpi-delta'>↑ $0.80 vs yesterday</div></div>", unsafe_allow_html=True)
+    b4.markdown("<div class='kpi'><div class='kpi-label'>Bookings today</div><div class='kpi-val'>19</div><div class='kpi-delta'>↑ 5 vs last Tue</div></div>", unsafe_allow_html=True)
 
-st.divider()
+st.markdown("<div class='glowdiv' style='margin:1.4rem 0'></div>", unsafe_allow_html=True)
 
-# ─── tabs ─────────────────────────────────────────────────────────────────────
+# ── tabs ──────────────────────────────────────────────────────────────────────
 tab_home, tab_homeowner, tab_events, tab_how = st.tabs([
-    "🏠  Overview",
-    "🚗  Homeowner Portal",
+    "⚡  Live Pricing",
+    "🏠  Homeowner Portal",
     "🎤  Events & Alerts",
     "🧠  How the AI Works",
 ])
 
-
 # ══════════════════════════════════════════════════════════════════════════════
-# TAB 1: OVERVIEW — live market snapshot
+# TAB 1 — LIVE PRICING
 # ══════════════════════════════════════════════════════════════════════════════
 with tab_home:
-    st.markdown("### Live market snapshot")
-    st.caption("What drivers are seeing right now across the Inglewood / USC area")
+    st.markdown("<div class='sec-title'>Live price calculator</div><div class='sec-sub'>Pick a scenario and see the AI price in real time</div>", unsafe_allow_html=True)
 
-    # top KPI row
-    k1, k2, k3, k4 = st.columns(4)
-    k1.metric("Active drivers searching", "247", "+18 last hour")
-    k2.metric("Spots listed today", "34")
-    k3.metric("Avg price / hr", "$4.20", "+$0.80 vs yesterday")
-    k4.metric("Bookings today", "19", "+5 vs last Tuesday")
+    col_in, col_out = st.columns([1, 1], gap="large")
 
-    st.divider()
-
-    # quick price lookup
-    st.markdown("### 🔍 Quick price lookup")
-    st.caption("See what Parkzy would charge for a spot right now")
-
-    col_a, col_b, col_c = st.columns(3)
-    with col_a:
-        zone = st.selectbox("Neighbourhood", list(LA_METER_RATES.keys()), index=4)
-    with col_b:
-        scenario = st.selectbox("Situation", [
+    with col_in:
+        st.markdown("<div class='gcard'><h4>📍 Scenario inputs</h4>", unsafe_allow_html=True)
+        zone = st.selectbox("Neighbourhood", list(LA_METER_RATES.keys()), index=4, key="zone_tab1")
+        scenario = st.selectbox("Quick scenario", [
             "Regular day, quiet",
             "Busy evening, no event",
             "Game day — 3 hrs out",
             "Concert — 1 hr out (sold out)",
+            "Custom →",
         ])
-    with col_c:
-        st.markdown("<br>", unsafe_allow_html=True)
-        run = st.button("Get price →", type="primary", use_container_width=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
-    scenario_params = {
-        "Regular day, quiet":              dict(active_users=40,  listed_spots=30, hours_to_event=999, event_size=0.0, day_of_week=2, hour=14),
-        "Busy evening, no event":          dict(active_users=120, listed_spots=20, hours_to_event=999, event_size=0.0, day_of_week=4, hour=19),
-        "Game day — 3 hrs out":            dict(active_users=280, listed_spots=15, hours_to_event=3,   event_size=0.7, day_of_week=5, hour=17),
-        "Concert — 1 hr out (sold out)":   dict(active_users=450, listed_spots=8,  hours_to_event=1,   event_size=1.0, day_of_week=6, hour=19),
-    }
+        scenario_params = {
+            "Regular day, quiet":            dict(active_users=40,  listed_spots=30, hours_to_event=999, event_size=0.0, day_of_week=2, hour=14),
+            "Busy evening, no event":        dict(active_users=120, listed_spots=20, hours_to_event=999, event_size=0.0, day_of_week=4, hour=19),
+            "Game day — 3 hrs out":          dict(active_users=280, listed_spots=15, hours_to_event=3,   event_size=0.7, day_of_week=5, hour=17),
+            "Concert — 1 hr out (sold out)": dict(active_users=450, listed_spots=8,  hours_to_event=1,   event_size=1.0, day_of_week=6, hour=19),
+        }
 
-    if run:
-        params = scenario_params[scenario]
-        r = pricer.price(zone=zone, temperature=72, **params)
-        meter = LA_METER_RATES.get(zone, LA_METER_RATES["default"])
-        savings = meter - r["final_price"]
+        if scenario == "Custom →":
+            st.markdown("<div class='gcard'><h4>🎛 Custom inputs</h4>", unsafe_allow_html=True)
+            active_users   = st.slider("Active users searching", 5, 600, 80)
+            listed_spots   = st.slider("Spots available", 1, 100, 20)
+            hours_to_event = st.slider("Hours to nearest event", 0.0, 48.0, 4.0, step=0.5)
+            event_size     = st.slider("Event size (0 = small, 1 = sold-out)", 0.0, 1.0, 0.6)
+            hour           = st.slider("Hour of day", 0, 23, 18)
+            dow            = st.selectbox("Day", ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"], index=5)
+            params = dict(active_users=active_users, listed_spots=listed_spots,
+                          hours_to_event=hours_to_event if hours_to_event < 48 else 999,
+                          event_size=event_size, day_of_week=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].index(dow), hour=hour)
+            st.markdown("</div>", unsafe_allow_html=True)
+        else:
+            params = scenario_params[scenario]
 
-        rc1, rc2 = st.columns([1, 2])
-        with rc1:
-            st.markdown(f"<p class='price-label'>Parkzy recommended price</p><p class='big-price'>${r['final_price']:.2f}<span style='font-size:1.2rem;color:#888'>/hr</span></p>", unsafe_allow_html=True)
-            if savings > 0:
-                st.markdown(f"<span class='badge-green'>✓ ${savings:.2f}/hr cheaper than street meter</span>", unsafe_allow_html=True)
-            else:
-                st.markdown(f"<span class='badge-orange'>⚡ Peak surge pricing active</span>", unsafe_allow_html=True)
+        run = st.button("⚡  Calculate price", type="primary", use_container_width=True)
 
-        with rc2:
+    with col_out:
+        if run or "last_r" in st.session_state:
+            if run:
+                r = pricer.price(zone=zone, temperature=72, **params)
+                st.session_state["last_r"] = r
+                st.session_state["last_zone"] = zone
+            r    = st.session_state["last_r"]
+            zone = st.session_state.get("last_zone", zone)
+            meter = LA_METER_RATES.get(zone, LA_METER_RATES["default"])
+            savings = meter - r["final_price"]
+            demand  = r["active_users"] / max(r["listed_spots"], 1)
+
+            st.markdown(f"""
+            <div class='gcard' style='text-align:center; padding: 2rem 1.5rem;'>
+                <div class='price-label'>AI recommended price</div>
+                <div class='big-price'>${r['final_price']:.2f}</div>
+                <div style='color:#475569; font-size:0.9rem; margin-top:4px'>per hour</div>
+                <div style='margin-top:1rem'>
+                    {'<span class="badge badge-green">✓ ${:.2f}/hr below street meter</span>'.format(savings) if savings > 0 else '<span class="badge badge-orange">⚡ Peak surge active</span>'}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
             m1, m2, m3 = st.columns(3)
-            m1.metric("Base rate", f"${r['base']:.2f}", help="LA meter average for this zone × 0.85")
-            m2.metric("Surge multiplier", f"{r['surge_mult']:.1f}×", help="How much the ML bumped the price based on demand")
-            m3.metric("Street meter", f"${meter:.2f}", help="What you'd pay at a LADOT meter nearby")
+            m1.metric("Base rate",        f"${r['base']:.2f}",        help="Meter avg × 0.85")
+            m2.metric("Surge multiplier", f"{r['surge_mult']:.1f}×",  help="ML demand boost")
+            m3.metric("Street meter",     f"${meter:.2f}",             help="LADOT rate nearby")
 
-            demand = r["active_users"] / max(r["listed_spots"], 1)
+            st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+            d_pct = min(demand / 15, 1.0)
             level = "🔴 Very high" if demand > 10 else "🟠 High" if demand > 5 else "🟡 Medium" if demand > 2 else "🟢 Low"
-            st.progress(min(demand / 15, 1.0), text=f"Demand pressure: {level}  ({demand:.1f}× more searchers than spots)")
+            st.progress(d_pct, text=f"Demand pressure: {level}  ·  {demand:.1f}× more searchers than spots")
 
+            st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+            cb1, cb2 = st.columns(2)
+            with cb1:
+                if st.button("✅ Spot was booked", use_container_width=True):
+                    pricer.record_outcome(True, r["final_price"] * 2)
+                    st.success("RL updated — reward logged!")
+            with cb2:
+                if st.button("❌ No booking", use_container_width=True):
+                    pricer.record_outcome(False, 0)
+                    st.info("RL updated — penalty logged.")
+        else:
+            st.markdown("""
+            <div class='gcard' style='text-align:center; padding:3rem 1.5rem;'>
+                <div style='font-size:3rem; margin-bottom:1rem'>⚡</div>
+                <div style='font-family:Syne,sans-serif; font-size:1.1rem; color:#334155; font-weight:600'>
+                    Set a scenario and hit Calculate
+                </div>
+                <div style='color:#1e2d45; font-size:0.85rem; margin-top:0.5rem'>
+                    AI price appears here instantly
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════════════════
-# TAB 2: HOMEOWNER PORTAL
+# TAB 2 — HOMEOWNER PORTAL
 # ══════════════════════════════════════════════════════════════════════════════
 with tab_homeowner:
-    st.markdown("### Your parking spot, your rules")
-    st.caption("Set a fixed rate, or let Parkzy's AI optimise pricing for you automatically")
+    st.markdown("<div class='sec-title'>Homeowner portal</div><div class='sec-sub'>Your spot, your rules — AI-optimised or fixed rate</div>", unsafe_allow_html=True)
 
-    col_left, col_right = st.columns([1, 1], gap="large")
+    col_l, col_r = st.columns([1, 1], gap="large")
 
-    with col_left:
-        st.markdown("#### 📍 Your spot details")
-        owner_name  = st.text_input("Your name", value="Alex Johnson")
-        spot_zone   = st.selectbox("Your neighbourhood", list(LA_METER_RATES.keys()), index=4)
-        spot_desc   = st.text_input("Spot description", placeholder="e.g. Driveway, fits 1 car, covered")
+    with col_l:
+        st.markdown("<div class='gcard'><h4>📍 Spot details</h4>", unsafe_allow_html=True)
+        owner_name = st.text_input("Your name", value="Alex Johnson")
+        spot_zone = st.selectbox("Neighbourhood", list(LA_METER_RATES.keys()), index=4, key="zone_tab2")
+        st.markdown("</div>", unsafe_allow_html=True)
 
-        st.markdown("#### 💰 Pricing mode")
+        st.markdown("<div class='gcard'><h4>💰 Pricing mode</h4>", unsafe_allow_html=True)
+        pricing_mode = st.radio("", [
+            "🤖  AI sets the price automatically",
+            "✏️  I'll set my own fixed rate",
+        ], label_visibility="collapsed")
 
-        pricing_mode = st.radio(
-            "How do you want to price your spot?",
-            ["🤖  Let Parkzy AI set the price", "✏️  I'll set my own fixed rate"],
-            help="AI mode earns you more on event days. Fixed rate gives you full control.",
-        )
-
-        if pricing_mode == "✏️  I'll set my own fixed rate":
-            fixed_rate = st.number_input(
-                "Your fixed rate ($/hr)",
-                min_value=1.0, max_value=50.0, value=5.0, step=0.50,
-                help="This is what every driver will be charged, regardless of demand or events."
-            )
+        if "fixed" in pricing_mode:
+            fixed_rate = st.number_input("Your fixed rate ($/hr)", 1.0, 50.0, 5.0, step=0.5)
             floor_override = None
-            st.markdown(f"<span class='badge-blue'>Fixed at ${fixed_rate:.2f}/hr</span>", unsafe_allow_html=True)
+            st.markdown(f"<span class='badge badge-cyan'>Locked at ${fixed_rate:.2f}/hr</span>", unsafe_allow_html=True)
         else:
             fixed_rate = None
-            st.markdown("AI pricing is **on**. Your rate adjusts automatically based on demand and nearby events.")
-            floor_override = st.slider(
-                "Minimum price you'll accept ($/hr)",
-                min_value=1.0, max_value=20.0, value=3.0, step=0.50,
-                help="Parkzy will never price your spot below this, even when it's quiet."
-            )
+            floor_override = st.slider("Minimum you'll accept ($/hr)", 1.0, 20.0, 3.0, step=0.5)
+            st.markdown(f"<span class='badge badge-purple'>AI pricing · floor ${floor_override:.2f}/hr</span>", unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
-        st.markdown("#### 🕐 Availability")
-        avail_days = st.multiselect(
-            "Available days",
-            ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            default=["Fri", "Sat", "Sun"]
-        )
-        avail_hours = st.slider("Available hours", 0, 23, (14, 23), help="24h format")
+        st.markdown("<div class='gcard'><h4>🕐 Availability</h4>", unsafe_allow_html=True)
+        avail_days  = st.multiselect("Available days", ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"], default=["Fri","Sat","Sun"])
+        avail_hours = st.slider("Hours available", 0, 23, (14, 23))
+        st.markdown("</div>", unsafe_allow_html=True)
 
-        calculate = st.button("📊 See my earnings estimate", type="primary", use_container_width=True)
+        go = st.button("📊  See earnings estimate", type="primary", use_container_width=True)
 
-    with col_right:
-        st.markdown("#### 📈 Your earnings preview")
-
-        if calculate:
+    with col_r:
+        if go:
             scenarios = [
                 ("Quiet weekday",        dict(active_users=40,  listed_spots=25, hours_to_event=999, event_size=0.0, day_of_week=2, hour=14)),
                 ("Busy Friday evening",  dict(active_users=130, listed_spots=18, hours_to_event=999, event_size=0.0, day_of_week=4, hour=19)),
                 ("Lakers game day",      dict(active_users=290, listed_spots=12, hours_to_event=3,   event_size=0.7, day_of_week=5, hour=17)),
                 ("Taylor Swift concert", dict(active_users=480, listed_spots=7,  hours_to_event=1,   event_size=1.0, day_of_week=6, hour=19)),
             ]
-
             rows = []
-            for label, params in scenarios:
-                if fixed_rate is not None:
-                    ai_r    = pricer.price(zone=spot_zone, temperature=72, **params)
-                    your_rate = fixed_rate
-                    ai_rate   = ai_r["final_price"]
-                else:
-                    ai_r    = pricer.price(zone=spot_zone, temperature=72, **params)
-                    your_rate = max(ai_r["final_price"], floor_override or 1.5)
-                    ai_rate   = your_rate
+            for label, p in scenarios:
+                ai_r = pricer.price(zone=spot_zone, temperature=72, **p)
+                your = fixed_rate if fixed_rate else max(ai_r["final_price"], floor_override or 1.5)
+                rows.append({"Scenario": label, "Your rate": f"${your:.2f}/hr", "AI rate": f"${ai_r['final_price']:.2f}/hr", "3hr session": f"${your*3:.2f}"})
 
-                rows.append({
-                    "Scenario":       label,
-                    "Your rate ($/hr)": f"${your_rate:.2f}",
-                    "AI rate ($/hr)":  f"${ai_rate:.2f}",
-                    "Est. 3hr session": f"${your_rate * 3:.2f}",
-                })
+            st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
-            df = pd.DataFrame(rows)
-            st.dataframe(df, use_container_width=True, hide_index=True)
+            sessions = len(avail_days) * 4 * 1.5
+            avg_r    = fixed_rate if fixed_rate else (floor_override or 3.0) * 1.4
+            monthly  = sessions * avg_r * 2.5
 
-            # monthly estimate
-            sessions_per_month = len(avail_days) * 4 * 1.5  # rough avg
-            avg_rate = fixed_rate if fixed_rate else (floor_override or 3.0) * 1.4
-            monthly = sessions_per_month * avg_rate * 2.5
-
-            st.markdown("---")
-            st.markdown(f"<p class='price-label'>Estimated monthly earnings</p><p class='big-price'>${monthly:.0f}</p>", unsafe_allow_html=True)
-            st.caption(f"Based on ~{sessions_per_month:.0f} sessions/month across {len(avail_days)} days · avg {avail_hours[1]-avail_hours[0]} hr window")
-
-            if fixed_rate is not None:
-                ai_avg = np.mean([
-                    pricer.price(zone=spot_zone, temperature=72, **p)["final_price"]
-                    for _, p in scenarios
-                ])
-                if ai_avg > fixed_rate:
-                    uplift = (ai_avg - fixed_rate) * sessions_per_month * 2.5
-                    st.info(f"💡 Switching to AI pricing could earn you an extra **${uplift:.0f}/month** on average — especially on event days.")
-        else:
-            st.markdown("""
-            <div style='background:#f8f9fb; border-radius:12px; padding:2rem; text-align:center; color:#888; margin-top:2rem;'>
-                <p style='font-size:2rem'>💸</p>
-                <p>Fill in your details and hit <strong>See my earnings estimate</strong></p>
+            st.markdown(f"""
+            <div class='gcard' style='text-align:center; margin-top:1rem'>
+                <div class='price-label'>Estimated monthly earnings</div>
+                <div class='big-price'>${monthly:.0f}</div>
+                <div style='color:#475569; font-size:0.82rem; margin-top:6px'>
+                    ~{sessions:.0f} sessions · {len(avail_days)} days/wk · {avail_hours[1]-avail_hours[0]}hr window
+                </div>
             </div>
             """, unsafe_allow_html=True)
 
+            if fixed_rate:
+                ai_avg = np.mean([pricer.price(zone=spot_zone, temperature=72, **p)["final_price"] for _, p in scenarios])
+                if ai_avg > fixed_rate:
+                    uplift = (ai_avg - fixed_rate) * sessions * 2.5
+                    st.markdown(f"<div class='gcard'><span class='badge badge-green'>💡 Tip</span><p style='margin-top:0.5rem'>Switching to AI pricing could earn you an extra <strong style='color:#34d399'>${uplift:.0f}/month</strong> — especially on event days.</p></div>", unsafe_allow_html=True)
+        else:
+            st.markdown("""
+            <div class='gcard' style='text-align:center; padding:3rem 1.5rem; margin-top:2rem'>
+                <div style='font-size:3rem; margin-bottom:1rem'>💸</div>
+                <div style='font-family:Syne,sans-serif; color:#334155; font-weight:600'>
+                    Fill in your details and hit<br>See earnings estimate
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════════════════
-# TAB 3: EVENTS & ALERTS
+# TAB 3 — EVENTS & ALERTS
 # ══════════════════════════════════════════════════════════════════════════════
 with tab_events:
-    st.markdown("### 🎤 Upcoming events near your spot")
-    st.caption("Parkzy monitors events at nearby venues and alerts homeowners before demand spikes")
+    st.markdown("<div class='sec-title'>Events & homeowner alerts</div><div class='sec-sub'>Parkzy watches nearby venues and tells homeowners when to list</div>", unsafe_allow_html=True)
 
-    if st.button("🔄  Refresh events", use_container_width=False):
-        with st.spinner("Checking nearby venues…"):
-            events = fetch_upcoming_events(api_key=None)
-            st.session_state["events"] = events
-            st.session_state["alerts"] = homeowner_alerts(events)
+    if st.button("🔄  Refresh", use_container_width=False):
+        with st.spinner("Scanning venues…"):
+            st.session_state["events"] = fetch_upcoming_events()
+            st.session_state["alerts"] = homeowner_alerts(st.session_state["events"])
 
     if "events" not in st.session_state:
-        with st.spinner("Loading events…"):
-            st.session_state["events"] = fetch_upcoming_events(api_key=None)
-            st.session_state["alerts"] = homeowner_alerts(st.session_state["events"])
+        st.session_state["events"] = fetch_upcoming_events()
+        st.session_state["alerts"] = homeowner_alerts(st.session_state["events"])
 
     events = st.session_state["events"]
     alerts = st.session_state["alerts"]
 
-    # event cards
     cols = st.columns(len(events))
     for i, ev in enumerate(events):
+        ds = ev["demand_score"]
+        cls = "evcard-hot" if ds > 0.6 else "evcard-warm" if ds > 0.3 else "evcard-cool"
+        badge = f"<span class='badge badge-red'>🔥 High demand</span>" if ds > 0.6 \
+           else f"<span class='badge badge-orange'>📈 Medium</span>" if ds > 0.3 \
+           else f"<span class='badge badge-cyan'>😴 Low</span>"
         with cols[i]:
-            ds = ev["demand_score"]
-            color = "#fff1f0" if ds > 0.6 else "#fffbeb" if ds > 0.3 else "#f0fdf4"
-            border = "#ef4444" if ds > 0.6 else "#f59e0b" if ds > 0.3 else "#22c55e"
-            badge = "🔥 High demand" if ds > 0.6 else "📈 Medium" if ds > 0.3 else "😴 Low"
             st.markdown(f"""
-            <div style='background:{color}; border:1px solid {border}; border-radius:12px; padding:1rem;'>
-                <p style='font-weight:700; margin:0; font-size:0.95rem;'>{ev['name']}</p>
-                <p style='color:#666; font-size:0.8rem; margin:0.2rem 0;'>📍 {ev['venue']}</p>
-                <p style='color:#666; font-size:0.8rem; margin:0;'>⏱ In {ev['hours_until']:.0f} hrs · {ev['capacity']:,} cap.</p>
-                <p style='margin-top:0.5rem; font-size:0.8rem;'>{badge}</p>
+            <div class='evcard {cls}'>
+                <p class='evcard-name'>{ev['name']}</p>
+                <p class='evcard-meta'>📍 {ev['venue']}</p>
+                <p class='evcard-meta'>⏱ In {ev['hours_until']:.0f} hrs</p>
+                <p class='evcard-meta'>👥 {ev['capacity']:,} capacity</p>
+                <div style='margin-top:0.6rem'>{badge}</div>
+                <div style='margin-top:0.4rem; font-size:0.72rem; color:#334155'>
+                    Demand score: {ds:.2f} / 1.00
+                </div>
             </div>
             """, unsafe_allow_html=True)
 
-    st.markdown("### 📱 Homeowner alerts")
+    st.markdown("<div class='glowdiv'></div>", unsafe_allow_html=True)
+    st.markdown("<div class='sec-title' style='font-size:1.1rem'>📱 Homeowner notification queue</div>", unsafe_allow_html=True)
+
     if alerts:
         for a in alerts:
-            css_class = "notif-high" if a["alert_level"] == "high" else "notif-med"
+            cls  = "notif-high" if a["alert_level"] == "high" else "notif-med"
             icon = "🔥" if a["alert_level"] == "high" else "📍"
             st.markdown(f"""
-            <div class='{css_class}'>
+            <div class='notif {cls}'>
                 <strong>{icon} {a['name']}</strong><br>
-                <span style='font-size:0.9rem'>{a['message']}</span>
+                <span>{a['message']}</span>
             </div>
             """, unsafe_allow_html=True)
     else:
-        st.success("✅ No high-demand events right now — prices are at base rate.")
-
+        st.markdown("<div class='gcard'><p>✅ No high-demand events right now — prices are at base rate.</p></div>", unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════════════════
-# TAB 4: HOW THE AI WORKS — non-technical explainer
+# TAB 4 — HOW THE AI WORKS
 # ══════════════════════════════════════════════════════════════════════════════
 with tab_how:
-    st.markdown("### 🧠 How Parkzy's pricing AI works")
-    st.caption("A plain-English explanation of the three layers under the hood")
+    st.markdown("<div class='sec-title'>How the AI works</div><div class='sec-sub'>Three layers that price every spot automatically</div>", unsafe_allow_html=True)
 
     st.markdown("""
-    <div class='card'>
-        <h4 style='margin-top:0'>Layer 1 — Base price anchor 🏷️</h4>
-        <p>Every spot starts from the average LADOT street meter rate for its neighbourhood.
-        We automatically price <strong>15% below that</strong> so Parkzy is always the better deal for drivers —
-        no homeowner has to think about this, it's baked in.</p>
-        <p style='color:#888; font-size:0.85rem'>Example: Inglewood meters average $2.50/hr → Parkzy base = $2.12/hr</p>
+    <div class='gcard'>
+        <h4>Layer 1 — Base price anchor 🏷️</h4>
+        <p>Every spot starts from the average LADOT street meter rate for its zone.
+        We automatically price <strong>15% below that</strong> — so Parkzy is always the cheaper option,
+        baked into the math, no homeowner has to think about it.</p>
+        <p class='sub'>Inglewood meters avg $2.50/hr → Parkzy base = $2.12/hr</p>
     </div>
-
-    <div class='card'>
-        <h4 style='margin-top:0'>Layer 2 — Surge model 📈</h4>
-        <p>A machine learning model watches <strong>8 real-time signals</strong> and predicts how much demand
-        justifies raising the price above base. It was trained on thousands of scenarios and learned
-        patterns like "320 people searching, 12 spots available, Saturday night, 2 hours before a
-        stadium event = 3× price".</p>
-        <p>The signals it weighs, in order of importance:</p>
+    <div class='gcard'>
+        <h4>Layer 2 — Surge model 📈</h4>
+        <p>A gradient boosted ML model trained on thousands of scenarios predicts a surge multiplier
+        based on 8 live signals. Pattern example: <strong>320 searchers, 12 spots, Saturday night,
+        2 hrs before a stadium event = 3.2× price.</strong></p>
+        <p>Signals it weighs, in order of importance:</p>
     </div>
     """, unsafe_allow_html=True)
 
     fi = pricer.surge_model.feature_importances()
     df_fi = pd.DataFrame({
-        "Signal": [
-            "Active users searching",
-            "Hours until event",
-            "Event size",
-            "Hour of day",
-            "Spots available",
-            "Day of week",
-            "Weekend",
-            "Temperature",
-        ],
+        "Signal": ["Active users searching","Hours until event","Event size","Hour of day","Spots available","Day of week","Weekend","Temperature"],
         "Weight": list(fi.values()),
-        "Plain English": [
-            "More people searching = higher price",
-            "Closer to event = bigger surge",
-            "Bigger venue = bigger surge",
-            "Evening rush hours cost more",
-            "Fewer spots = higher price",
-            "Weekends naturally busier",
-            "Weekend bonus applied",
-            "Hot days reduce walking = higher demand",
-        ]
+        "What it means": ["More demand = higher price","Closer to event = bigger surge","Bigger venue = bigger surge","Evening rush hours cost more","Fewer spots = higher price","Weekends naturally busier","Weekend bonus applied","Hot days reduce walking"],
     }).sort_values("Weight", ascending=False)
-
-    df_fi["Weight %"] = (df_fi["Weight"] * 100).round(1).astype(str) + "%"
-    st.dataframe(df_fi[["Signal", "Weight %", "Plain English"]], use_container_width=True, hide_index=True)
+    df_fi["Weight %"] = (df_fi["Weight"]*100).round(1).astype(str) + "%"
+    st.dataframe(df_fi[["Signal","Weight %","What it means"]], use_container_width=True, hide_index=True)
 
     st.markdown("""
-    <div class='card' style='margin-top:1rem'>
-        <h4 style='margin-top:0'>Layer 3 — Self-learning loop 🤖</h4>
-        <p>This is what makes Parkzy smarter over time. After every booking (or missed booking),
-        the system gets a signal:</p>
+    <div class='gcard' style='margin-top:1rem'>
+        <h4>Layer 3 — Self-learning RL loop 🤖</h4>
+        <p>After every session the system gets a reward or penalty signal and nudges its pricing strategy:</p>
         <ul>
-            <li>✅ <strong>Spot booked</strong> → the price was right, remember this</li>
-            <li>❌ <strong>Spot sat empty</strong> → too expensive, nudge it down next time</li>
-            <li>⚡ <strong>Booked instantly</strong> → could have charged more, note that</li>
+            <li>✅ <strong>Spot booked</strong> → price was right, remember this</li>
+            <li>❌ <strong>Spot sat empty</strong> → too expensive, nudge down next time</li>
+            <li>⚡ <strong>Booked instantly</strong> → could have charged more</li>
         </ul>
-        <p>Over thousands of real bookings, the AI builds a map of exactly what to charge
-        in every situation — without anyone programming those rules manually.</p>
-        <p style='color:#888; font-size:0.85rem'>Technical name: Epsilon-greedy reinforcement learning with a Q-table.
-        Exploration rate 15% — meaning 1 in 7 pricing decisions tries something new to keep learning.</p>
+        <p>Over thousands of real bookings the AI builds a map of what to charge in every situation — no manual rules needed.</p>
+        <p class='sub'>Epsilon-greedy Q-table · ε=0.15 · α=0.10 · γ=0.90</p>
     </div>
     """, unsafe_allow_html=True)
 
-    # live demo of the RL table
-    st.markdown("#### Live learning table")
-    st.caption("This is the AI's current best guess for price adjustments by situation — it updates every booking")
+    st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
+    st.markdown("<div class='sec-title' style='font-size:1rem; margin-bottom:4px'>Live learning table</div>", unsafe_allow_html=True)
+    st.markdown("<div class='sec-sub'>Best price adjustment per situation — updates every booking</div>", unsafe_allow_html=True)
 
     df_q = pricer.rl.policy_summary()
     if not df_q.empty:
-        df_q["Demand level"] = df_q["state"].apply(lambda s: ["Very low","Low","Medium","High","Very high"][min(int(s.split("_")[0]),4)])
-        df_q["Event proximity"] = df_q["state"].apply(lambda s: {0:"No event nearby", 1:"Event in 3-12 hrs", 2:"Event in <3 hrs"}[int(s.split("_")[1])])
-        df_q["Price adjustment"] = df_q["best_delta"].apply(lambda d: f"{'▲' if d>0 else '▼' if d<0 else '—'} {abs(d):.2f}×")
-        st.dataframe(
-            df_q[["Demand level","Event proximity","Price adjustment"]],
-            use_container_width=True, hide_index=True
-        )
+        df_q["Demand level"]    = df_q["state"].apply(lambda s: ["Very low","Low","Medium","High","Very high"][min(int(s.split("_")[0]),4)])
+        df_q["Event proximity"] = df_q["state"].apply(lambda s: {0:"No event",1:"Event 3–12 hrs",2:"Event <3 hrs"}[int(s.split("_")[1])])
+        df_q["Adjustment"]      = df_q["best_delta"].apply(lambda d: f"{'▲' if d>0 else '▼' if d<0 else '—'} {abs(d):.2f}×")
+        st.dataframe(df_q[["Demand level","Event proximity","Adjustment"]], use_container_width=True, hide_index=True)
