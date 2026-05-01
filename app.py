@@ -1,5 +1,5 @@
 """
-Parkzy – Streamlit Demo  (dark AI startup edition)
+Parkzy – Streamlit Demo  (purple dark edition)
 Run: streamlit run app.py
 """
 
@@ -15,222 +15,157 @@ from pricing_engine import (
     homeowner_alerts, LA_METER_RATES,
 )
 
-# ── page config ────────────────────────────────────────────────────────────────
 st.set_page_config(page_title="Parkzy", page_icon="🅿️",
                    layout="wide", initial_sidebar_state="collapsed")
 
-# ── CSS ────────────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
-/* ── reset & base ── */
-html, body, [class*="css"] {
-    font-family: 'DM Sans', sans-serif;
+* { font-family: 'Space Grotesk', sans-serif !important; }
+
+html, body, [class*="css"], .stApp {
     background-color: #0a0710 !important;
     color: #ede9fe !important;
 }
 .block-container {
-    padding-top: 1.8rem !important;
+    padding-top: 1.6rem !important;
     padding-bottom: 2rem !important;
-    max-width: 1120px !important;
+    max-width: 1100px !important;
     background: transparent !important;
 }
-section[data-testid="stSidebar"] { background: #0d0a17 !important; }
 
-/* ── scrollbar ── */
+/* scrollbar */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: #0d0a17; }
-::-webkit-scrollbar-thumb { background: #3b1f6a; border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: #4c1d95; border-radius: 4px; }
 
-/* ── logo / header ── */
+/* logo */
 .park-logo {
-    font-family: 'Syne', sans-serif;
-    font-size: 2rem; font-weight: 800;
-    background: linear-gradient(135deg, #c084fc 0%, #a855f7 50%, #e879f9 100%);
+    font-size: 1.9rem; font-weight: 700;
+    background: linear-gradient(135deg, #c084fc, #e879f9);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    letter-spacing: -0.03em; line-height: 1;
+    letter-spacing: -0.02em; line-height: 1;
 }
-.park-tagline {
-    font-size: 0.82rem; color: #6b21a8; letter-spacing: 0.06em;
-    text-transform: uppercase; margin-top: 2px;
-}
+.park-tagline { font-size: 0.78rem; color: #581c87; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 3px; }
 
-/* ── tabs ── */
+/* tabs */
 [data-baseweb="tab-list"] {
-    background: #12082a !important;
-    border-radius: 12px !important;
-    padding: 4px !important;
-    border: 1px solid #2d1a5e !important;
-    gap: 2px !important;
+    background: #12082a !important; border-radius: 12px !important;
+    padding: 4px !important; border: 1px solid #2d1a5e !important; gap: 2px !important;
 }
 button[data-baseweb="tab"] {
-    font-family: 'DM Sans', sans-serif !important;
+    font-family: 'Space Grotesk', sans-serif !important;
     font-size: 0.85rem !important; font-weight: 500 !important;
-    color: #6b21a8 !important;
-    border-radius: 8px !important;
-    padding: 0.45rem 1.1rem !important;
-    transition: all 0.2s !important;
+    color: #7c3aed !important; border-radius: 8px !important;
+    padding: 0.4rem 1rem !important; transition: all 0.2s !important;
 }
 button[data-baseweb="tab"]:hover { color: #c084fc !important; background: #1a0a35 !important; }
 button[data-baseweb="tab"][aria-selected="true"] {
     background: linear-gradient(135deg, #2d1a5e, #3b1070) !important;
-    color: #e879f9 !important;
-    border: 1px solid #a855f744 !important;
+    color: #e879f9 !important; border: 1px solid #a855f744 !important;
 }
 
-/* ── glass card ── */
+/* glass card */
 .gcard {
-    background: linear-gradient(135deg, #12082a 0%, #0e0520 100%);
-    border: 1px solid #2d1a5e;
-    border-radius: 16px;
-    padding: 1.4rem 1.6rem;
-    margin-bottom: 1rem;
-    position: relative;
-    overflow: hidden;
-}
-.gcard::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, #a855f733, #e879f922, transparent);
-}
-.gcard h4 {
-    font-family: 'Syne', sans-serif;
-    color: #ede9fe; font-size: 1rem; font-weight: 700;
-    margin: 0 0 0.6rem 0; letter-spacing: -0.01em;
-}
-.gcard p, .gcard li { color: #a78bfa; font-size: 0.9rem; line-height: 1.65; margin: 0 0 0.5rem 0; }
-.gcard strong { color: #ddd6fe; }
-.gcard ul { padding-left: 1.2rem; }
-.gcard .sub { color: #4c1d95; font-size: 0.8rem; margin-top: 0.4rem; }
-
-/* ── kpi card ── */
-.kpi {
     background: linear-gradient(135deg, #12082a, #0e0520);
-    border: 1px solid #2d1a5e;
-    border-radius: 14px; padding: 1.1rem 1.3rem;
+    border: 1px solid #2d1a5e; border-radius: 16px;
+    padding: 1.4rem 1.6rem; margin-bottom: 1rem;
     position: relative; overflow: hidden;
 }
-.kpi::after {
-    content: ''; position: absolute;
-    bottom: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, #a855f7, #e879f9);
-    opacity: 0.6;
+.gcard::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, #a855f733, #e879f922, transparent);
 }
-.kpi-val {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.9rem; font-weight: 800; color: #ede9fe;
-    line-height: 1.1; letter-spacing: -0.03em;
-}
-.kpi-label { font-size: 0.75rem; color: #6b21a8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
-.kpi-delta { font-size: 0.78rem; color: #c084fc; margin-top: 3px; }
+.gcard h4 { font-size: 1rem; font-weight: 700; color: #ede9fe; margin: 0 0 0.6rem 0; }
+.gcard p, .gcard li { color: #a78bfa; font-size: 0.88rem; line-height: 1.65; margin: 0 0 0.5rem 0; }
+.gcard strong { color: #ddd6fe; }
+.gcard ul { padding-left: 1.2rem; }
+.gcard .sub { color: #4c1d95; font-size: 0.78rem; margin-top: 0.4rem; }
 
-/* ── big price ── */
+/* kpi */
+.kpi {
+    background: linear-gradient(135deg, #12082a, #0e0520);
+    border: 1px solid #2d1a5e; border-radius: 14px;
+    padding: 1rem 1.2rem; position: relative; overflow: hidden;
+}
+.kpi::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, #a855f7, #e879f9); opacity: 0.5;
+}
+.kpi-label { font-size: 0.72rem; color: #6b21a8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+.kpi-val   { font-size: 1.8rem; font-weight: 700; color: #ede9fe; line-height: 1.1; letter-spacing: -0.02em; }
+.kpi-delta { font-size: 0.76rem; color: #c084fc; margin-top: 3px; }
+
+/* big price */
 .big-price {
-    font-family: 'Syne', sans-serif;
-    font-size: 4rem; font-weight: 800; letter-spacing: -0.04em;
+    font-size: 3.8rem; font-weight: 700; letter-spacing: -0.03em;
     background: linear-gradient(135deg, #c084fc, #e879f9);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     line-height: 1;
 }
-.price-unit { font-size: 1.1rem; color: #6b21a8; font-weight: 400; }
-.price-label { font-size: 0.75rem; color: #6b21a8; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+.price-label { font-size: 0.72rem; color: #6b21a8; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
 
-/* ── badges ── */
-.badge {
-    display: inline-block; padding: 3px 11px;
-    border-radius: 20px; font-size: 0.75rem; font-weight: 600;
-    letter-spacing: 0.02em;
-}
+/* badges */
+.badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.74rem; font-weight: 600; }
+.badge-purple { background: #2d1a5e; color: #e879f9; border: 1px solid #e879f933; }
 .badge-cyan   { background: #1a0a35; color: #c084fc; border: 1px solid #a855f733; }
 .badge-green  { background: #0f1a0a; color: #86efac; border: 1px solid #86efac22; }
 .badge-orange { background: #2d1a05; color: #fb923c; border: 1px solid #fb923c22; }
 .badge-red    { background: #2d0505; color: #f87171; border: 1px solid #f8717122; }
-.badge-purple { background: #2d1a5e; color: #e879f9; border: 1px solid #e879f933; }
 
-/* ── section title ── */
-.sec-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.35rem; font-weight: 700; color: #ede9fe;
-    letter-spacing: -0.02em; margin-bottom: 2px;
-}
-.sec-sub { font-size: 0.82rem; color: #6b21a8; margin-bottom: 1.2rem; }
+/* section titles */
+.sec-title { font-size: 1.3rem; font-weight: 700; color: #ede9fe; letter-spacing: -0.01em; margin-bottom: 2px; }
+.sec-sub   { font-size: 0.8rem; color: #6b21a8; margin-bottom: 1.1rem; }
 
-/* ── divider ── */
-.glowdiv {
-    height: 1px; margin: 1.2rem 0;
-    background: linear-gradient(90deg, transparent, #4c1d95, transparent);
-}
+/* divider */
+.glowdiv { height: 1px; margin: 1.2rem 0; background: linear-gradient(90deg, transparent, #4c1d95, transparent); }
 
-/* ── event card ── */
-.evcard {
-    background: #12082a; border: 1px solid #2d1a5e;
-    border-radius: 14px; padding: 1rem 1.1rem;
-    transition: border-color 0.2s;
-}
+/* event cards */
+.evcard { background: #12082a; border: 1px solid #2d1a5e; border-radius: 14px; padding: 1rem 1.1rem; }
 .evcard-hot  { border-color: #ef444433 !important; background: #1a0a15 !important; }
 .evcard-warm { border-color: #f59e0b33 !important; background: #1a1005 !important; }
 .evcard-cool { border-color: #a855f733 !important; }
-.evcard-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.92rem; color: #ede9fe; margin: 0 0 4px 0; }
-.evcard-meta { font-size: 0.78rem; color: #6b21a8; margin: 1px 0; }
+.evcard-name { font-weight: 700; font-size: 0.9rem; color: #ede9fe; margin: 0 0 4px 0; }
+.evcard-meta { font-size: 0.76rem; color: #6b21a8; margin: 2px 0; }
 
-/* ── notif ── */
-.notif {
-    border-radius: 12px; padding: 1rem 1.2rem; margin: 0.5rem 0;
-    border-left: 3px solid;
-}
+/* notif */
+.notif { border-radius: 12px; padding: 1rem 1.2rem; margin: 0.5rem 0; border-left: 3px solid; }
 .notif-high { background: #1a0a15; border-color: #ef4444; }
 .notif-med  { background: #1a1005; border-color: #f59e0b; }
-.notif strong { color: #ede9fe; font-family: 'Syne', sans-serif; }
-.notif span   { color: #a78bfa; font-size: 0.88rem; }
+.notif strong { color: #ede9fe; }
+.notif span   { color: #a78bfa; font-size: 0.86rem; }
 
-/* ── streamlit overrides ── */
+/* placeholder */
+.placeholder { text-align: center; padding: 3rem 1.5rem; }
+.placeholder-icon { font-size: 2.5rem; margin-bottom: 0.8rem; }
+.placeholder-text { color: #4c1d95; font-size: 0.9rem; font-weight: 500; }
+
+/* streamlit widgets */
 [data-testid="metric-container"] {
-    background: #12082a !important;
-    border: 1px solid #2d1a5e !important;
+    background: #12082a !important; border: 1px solid #2d1a5e !important;
     border-radius: 12px !important; padding: 1rem 1.2rem !important;
 }
-[data-testid="metric-container"] label { color: #6b21a8 !important; font-size: 0.75rem !important; }
-[data-testid="stMetricValue"]          { color: #ede9fe !important; font-family: 'Syne', sans-serif !important; font-size: 1.5rem !important; }
-[data-testid="stMetricDelta"]          { color: #c084fc !important; }
-[data-testid="stDataFrame"]            { background: #12082a !important; border-radius: 12px !important; }
-div[data-testid="stDataFrameResizable"] > div { background: #12082a !important; }
-.stDataFrame th { background: #1a0a35 !important; color: #7c3aed !important; font-size: 0.78rem !important; }
-.stDataFrame td { color: #a78bfa !important; font-size: 0.85rem !important; }
-
-/* inputs */
+[data-testid="metric-container"] label { color: #6b21a8 !important; font-size: 0.74rem !important; }
+[data-testid="stMetricValue"] { color: #ede9fe !important; font-size: 1.4rem !important; font-weight: 700 !important; }
+[data-testid="stMetricDelta"] { color: #c084fc !important; }
+[data-testid="stDataFrame"], div[data-testid="stDataFrameResizable"] > div { background: #12082a !important; }
+.stDataFrame th { background: #1a0a35 !important; color: #7c3aed !important; font-size: 0.76rem !important; }
+.stDataFrame td { color: #a78bfa !important; font-size: 0.84rem !important; }
 div[data-baseweb="select"] > div,
 div[data-baseweb="input"] > div { background: #12082a !important; border-color: #2d1a5e !important; color: #ede9fe !important; border-radius: 10px !important; }
 label[data-testid="stWidgetLabel"] p { color: #7c3aed !important; font-size: 0.8rem !important; }
-.stSlider [data-testid="stTickBarMin"], .stSlider [data-testid="stTickBarMax"] { color: #6b21a8 !important; }
 .stSlider div[role="slider"] { background: #a855f7 !important; }
 div[data-baseweb="radio"] label p { color: #a78bfa !important; }
-
-/* buttons */
 .stButton > button {
     background: linear-gradient(135deg, #2d1a5e, #3b1070) !important;
     color: #c084fc !important; border: 1px solid #a855f744 !important;
-    border-radius: 10px !important; font-family: 'DM Sans', sans-serif !important;
-    font-weight: 500 !important; transition: all 0.2s !important;
+    border-radius: 10px !important; font-weight: 500 !important; transition: all 0.2s !important;
 }
-.stButton > button:hover {
-    background: linear-gradient(135deg, #7c3aed, #9333ea) !important;
-    color: white !important; border-color: transparent !important;
-    transform: translateY(-1px) !important;
-}
-.stButton > button[kind="primary"] {
-    background: linear-gradient(135deg, #7c3aed, #9333ea) !important;
-    color: white !important; border: none !important;
-}
-.stButton > button[kind="primary"]:hover { opacity: 0.9 !important; }
-
-/* progress bar */
+.stButton > button:hover { background: linear-gradient(135deg, #7c3aed, #9333ea) !important; color: white !important; transform: translateY(-1px) !important; }
+.stButton > button[kind="primary"] { background: linear-gradient(135deg, #7c3aed, #9333ea) !important; color: white !important; border: none !important; }
 .stProgress > div > div { background: linear-gradient(90deg, #a855f7, #e879f9) !important; }
-
-/* info / success */
 .stAlert { background: #12082a !important; border-radius: 12px !important; border-color: #2d1a5e !important; color: #a78bfa !important; }
-
-/* hide branding */
 #MainMenu, footer, header { visibility: hidden !important; }
 </style>
 """, unsafe_allow_html=True)
@@ -276,7 +211,7 @@ with tab_home:
 
     with col_in:
         st.markdown("<div class='gcard'><h4>📍 Scenario inputs</h4>", unsafe_allow_html=True)
-        zone = st.selectbox("Neighbourhood", list(LA_METER_RATES.keys()), index=4, key="zone_tab1")
+        zone     = st.selectbox("Neighbourhood", list(LA_METER_RATES.keys()), index=4)
         scenario = st.selectbox("Quick scenario", [
             "Regular day, quiet",
             "Busy evening, no event",
@@ -357,10 +292,10 @@ with tab_home:
             st.markdown("""
             <div class='gcard' style='text-align:center; padding:3rem 1.5rem;'>
                 <div style='font-size:3rem; margin-bottom:1rem'>⚡</div>
-                <div style='font-family:Syne,sans-serif; font-size:1.1rem; color:#334155; font-weight:600'>
+                <div style='font-size:1rem; color:#4c1d95; font-weight:600'>
                     Set a scenario and hit Calculate
                 </div>
-                <div style='color:#1e2d45; font-size:0.85rem; margin-top:0.5rem'>
+                <div style='color:#2d1a5e; font-size:0.85rem; margin-top:0.5rem'>
                     AI price appears here instantly
                 </div>
             </div>
@@ -377,7 +312,7 @@ with tab_homeowner:
     with col_l:
         st.markdown("<div class='gcard'><h4>📍 Spot details</h4>", unsafe_allow_html=True)
         owner_name = st.text_input("Your name", value="Alex Johnson")
-        spot_zone = st.selectbox("Neighbourhood", list(LA_METER_RATES.keys()), index=4, key="zone_tab2")
+        spot_zone  = st.selectbox("Neighbourhood", list(LA_METER_RATES.keys()), index=4)
         st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown("<div class='gcard'><h4>💰 Pricing mode</h4>", unsafe_allow_html=True)
@@ -427,7 +362,7 @@ with tab_homeowner:
             <div class='gcard' style='text-align:center; margin-top:1rem'>
                 <div class='price-label'>Estimated monthly earnings</div>
                 <div class='big-price'>${monthly:.0f}</div>
-                <div style='color:#475569; font-size:0.82rem; margin-top:6px'>
+                <div style='color:#6b21a8; font-size:0.82rem; margin-top:6px'>
                     ~{sessions:.0f} sessions · {len(avail_days)} days/wk · {avail_hours[1]-avail_hours[0]}hr window
                 </div>
             </div>
@@ -442,7 +377,7 @@ with tab_homeowner:
             st.markdown("""
             <div class='gcard' style='text-align:center; padding:3rem 1.5rem; margin-top:2rem'>
                 <div style='font-size:3rem; margin-bottom:1rem'>💸</div>
-                <div style='font-family:Syne,sans-serif; color:#334155; font-weight:600'>
+                <div style='color:#4c1d95; font-weight:600; font-size:0.95rem'>
                     Fill in your details and hit<br>See earnings estimate
                 </div>
             </div>
@@ -481,7 +416,7 @@ with tab_events:
                 <p class='evcard-meta'>⏱ In {ev['hours_until']:.0f} hrs</p>
                 <p class='evcard-meta'>👥 {ev['capacity']:,} capacity</p>
                 <div style='margin-top:0.6rem'>{badge}</div>
-                <div style='margin-top:0.4rem; font-size:0.72rem; color:#334155'>
+                <div style='margin-top:0.4rem; font-size:0.72rem; color:#4c1d95'>
                     Demand score: {ds:.2f} / 1.00
                 </div>
             </div>
