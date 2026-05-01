@@ -208,7 +208,7 @@ with tab_home:
 
     with col_in:
         st.markdown("<div class='gcard'><h4>📍 Scenario inputs</h4>", unsafe_allow_html=True)
-        zone     = st.selectbox("Neighbourhood", list(LA_METER_RATES.keys()), index=4)
+        zone     = st.selectbox("Neighbourhood", list(LA_METER_RATES.keys()), index=4, key="zone_tab1")
         scenario = st.selectbox("Quick scenario", [
             "Regular day, quiet",
             "Busy evening, no event",
@@ -309,7 +309,7 @@ with tab_homeowner:
     with col_l:
         st.markdown("<div class='gcard'><h4>📍 Spot details</h4>", unsafe_allow_html=True)
         owner_name = st.text_input("Your name", value="Alex Johnson")
-        spot_zone  = st.selectbox("Neighbourhood", list(LA_METER_RATES.keys()), index=4)
+        spot_zone = st.selectbox("Neighbourhood", list(LA_METER_RATES.keys()), index=4, key="zone_tab2")
         st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown("<div class='gcard'><h4>💰 Pricing mode</h4>", unsafe_allow_html=True)
