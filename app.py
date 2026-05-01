@@ -47,55 +47,55 @@ html, body, [class*="css"], .stApp {
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     letter-spacing: -0.02em; line-height: 1;
 }
-.park-tagline { font-size: 0.78rem; color: #581c87; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 3px; }
+.park-tagline { font-size: 0.78rem; color: #9d4edd; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 3px; }
 
 /* tabs */
 [data-baseweb="tab-list"] {
-    background: #12082a !important; border-radius: 12px !important;
-    padding: 4px !important; border: 1px solid #2d1a5e !important; gap: 2px !important;
+    background: #1a0a35 !important; border-radius: 12px !important;
+    padding: 4px !important; border: 1px solid #4c1d95 !important; gap: 2px !important;
 }
 button[data-baseweb="tab"] {
     font-family: 'Space Grotesk', sans-serif !important;
     font-size: 0.85rem !important; font-weight: 500 !important;
-    color: #7c3aed !important; border-radius: 8px !important;
+    color: #a78bfa !important; border-radius: 8px !important;
     padding: 0.4rem 1rem !important; transition: all 0.2s !important;
 }
-button[data-baseweb="tab"]:hover { color: #c084fc !important; background: #1a0a35 !important; }
+button[data-baseweb="tab"]:hover { color: #e9d5ff !important; background: #2d1a5e !important; }
 button[data-baseweb="tab"][aria-selected="true"] {
-    background: linear-gradient(135deg, #2d1a5e, #3b1070) !important;
-    color: #e879f9 !important; border: 1px solid #a855f744 !important;
+    background: linear-gradient(135deg, #4c1d95, #5b21b6) !important;
+    color: #f5d0fe !important; border: 1px solid #c084fc66 !important;
 }
 
 /* glass card */
 .gcard {
-    background: linear-gradient(135deg, #12082a, #0e0520);
-    border: 1px solid #2d1a5e; border-radius: 16px;
+    background: linear-gradient(135deg, #1a0a35, #150825);
+    border: 1px solid #4c1d95; border-radius: 16px;
     padding: 1.4rem 1.6rem; margin-bottom: 1rem;
     position: relative; overflow: hidden;
 }
 .gcard::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, #a855f733, #e879f922, transparent);
+    background: linear-gradient(90deg, transparent, #c084fc55, #e879f933, transparent);
 }
-.gcard h4 { font-size: 1rem; font-weight: 700; color: #ede9fe; margin: 0 0 0.6rem 0; }
-.gcard p, .gcard li { color: #a78bfa; font-size: 0.88rem; line-height: 1.65; margin: 0 0 0.5rem 0; }
-.gcard strong { color: #ddd6fe; }
+.gcard h4 { font-size: 1rem; font-weight: 700; color: #f5d0fe; margin: 0 0 0.6rem 0; }
+.gcard p, .gcard li { color: #c4b5fd; font-size: 0.88rem; line-height: 1.65; margin: 0 0 0.5rem 0; }
+.gcard strong { color: #f5d0fe; }
 .gcard ul { padding-left: 1.2rem; }
-.gcard .sub { color: #4c1d95; font-size: 0.78rem; margin-top: 0.4rem; }
+.gcard .sub { color: #7c3aed; font-size: 0.78rem; margin-top: 0.4rem; }
 
 /* kpi */
 .kpi {
-    background: linear-gradient(135deg, #12082a, #0e0520);
-    border: 1px solid #2d1a5e; border-radius: 14px;
+    background: linear-gradient(135deg, #1a0a35, #150825);
+    border: 1px solid #4c1d95; border-radius: 14px;
     padding: 1rem 1.2rem; position: relative; overflow: hidden;
 }
 .kpi::after {
     content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, #a855f7, #e879f9); opacity: 0.5;
+    background: linear-gradient(90deg, #a855f7, #e879f9); opacity: 0.8;
 }
-.kpi-label { font-size: 0.72rem; color: #6b21a8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
-.kpi-val   { font-size: 1.8rem; font-weight: 700; color: #ede9fe; line-height: 1.1; letter-spacing: -0.02em; }
-.kpi-delta { font-size: 0.76rem; color: #c084fc; margin-top: 3px; }
+.kpi-label { font-size: 0.72rem; color: #a78bfa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+.kpi-val   { font-size: 1.8rem; font-weight: 700; color: #f5d0fe; line-height: 1.1; letter-spacing: -0.02em; }
+.kpi-delta { font-size: 0.76rem; color: #e879f9; margin-top: 3px; }
 
 /* big price */
 .big-price {
@@ -104,68 +104,65 @@ button[data-baseweb="tab"][aria-selected="true"] {
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     line-height: 1;
 }
-.price-label { font-size: 0.72rem; color: #6b21a8; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+.price-label { font-size: 0.72rem; color: #a78bfa; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
 
 /* badges */
-.badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.74rem; font-weight: 600; }
-.badge-purple { background: #2d1a5e; color: #e879f9; border: 1px solid #e879f933; }
-.badge-cyan   { background: #1a0a35; color: #c084fc; border: 1px solid #a855f733; }
-.badge-green  { background: #0f1a0a; color: #86efac; border: 1px solid #86efac22; }
-.badge-orange { background: #2d1a05; color: #fb923c; border: 1px solid #fb923c22; }
-.badge-red    { background: #2d0505; color: #f87171; border: 1px solid #f8717122; }
+.badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.74rem; font-weight: 600; }
+.badge-purple { background: #4c1d95; color: #f5d0fe; border: 1px solid #c084fc55; }
+.badge-cyan   { background: #2d1a5e; color: #e9d5ff; border: 1px solid #c084fc44; }
+.badge-green  { background: #14532d; color: #bbf7d0; border: 1px solid #86efac44; }
+.badge-orange { background: #431407; color: #fed7aa; border: 1px solid #fb923c44; }
+.badge-red    { background: #450a0a; color: #fecaca; border: 1px solid #f8717144; }
 
 /* section titles */
-.sec-title { font-size: 1.3rem; font-weight: 700; color: #ede9fe; letter-spacing: -0.01em; margin-bottom: 2px; }
-.sec-sub   { font-size: 0.8rem; color: #6b21a8; margin-bottom: 1.1rem; }
+.sec-title { font-size: 1.3rem; font-weight: 700; color: #f5d0fe; letter-spacing: -0.01em; margin-bottom: 2px; }
+.sec-sub   { font-size: 0.8rem; color: #a78bfa; margin-bottom: 1.1rem; }
 
 /* divider */
-.glowdiv { height: 1px; margin: 1.2rem 0; background: linear-gradient(90deg, transparent, #4c1d95, transparent); }
+.glowdiv { height: 1px; margin: 1.2rem 0; background: linear-gradient(90deg, transparent, #7c3aed, transparent); }
 
 /* event cards */
-.evcard { background: #12082a; border: 1px solid #2d1a5e; border-radius: 14px; padding: 1rem 1.1rem; }
-.evcard-hot  { border-color: #ef444433 !important; background: #1a0a15 !important; }
-.evcard-warm { border-color: #f59e0b33 !important; background: #1a1005 !important; }
-.evcard-cool { border-color: #a855f733 !important; }
-.evcard-name { font-weight: 700; font-size: 0.9rem; color: #ede9fe; margin: 0 0 4px 0; }
-.evcard-meta { font-size: 0.76rem; color: #6b21a8; margin: 2px 0; }
+.evcard { background: #1a0a35; border: 1px solid #4c1d95; border-radius: 14px; padding: 1rem 1.1rem; }
+.evcard-hot  { border-color: #ef444466 !important; background: #2d0a1a !important; }
+.evcard-warm { border-color: #f59e0b66 !important; background: #2d1a05 !important; }
+.evcard-cool { border-color: #a855f766 !important; }
+.evcard-name { font-weight: 700; font-size: 0.9rem; color: #f5d0fe; margin: 0 0 4px 0; }
+.evcard-meta { font-size: 0.76rem; color: #a78bfa; margin: 2px 0; }
 
 /* notif */
 .notif { border-radius: 12px; padding: 1rem 1.2rem; margin: 0.5rem 0; border-left: 3px solid; }
-.notif-high { background: #1a0a15; border-color: #ef4444; }
-.notif-med  { background: #1a1005; border-color: #f59e0b; }
-.notif strong { color: #ede9fe; }
-.notif span   { color: #a78bfa; font-size: 0.86rem; }
-
-/* placeholder */
-.placeholder { text-align: center; padding: 3rem 1.5rem; }
-.placeholder-icon { font-size: 2.5rem; margin-bottom: 0.8rem; }
-.placeholder-text { color: #4c1d95; font-size: 0.9rem; font-weight: 500; }
+.notif-high { background: #2d0a1a; border-color: #f87171; }
+.notif-med  { background: #2d1a05; border-color: #fbbf24; }
+.notif strong { color: #f5d0fe; }
+.notif span   { color: #c4b5fd; font-size: 0.86rem; }
 
 /* streamlit widgets */
 [data-testid="metric-container"] {
-    background: #12082a !important; border: 1px solid #2d1a5e !important;
+    background: #1a0a35 !important; border: 1px solid #4c1d95 !important;
     border-radius: 12px !important; padding: 1rem 1.2rem !important;
 }
-[data-testid="metric-container"] label { color: #6b21a8 !important; font-size: 0.74rem !important; }
-[data-testid="stMetricValue"] { color: #ede9fe !important; font-size: 1.4rem !important; font-weight: 700 !important; }
-[data-testid="stMetricDelta"] { color: #c084fc !important; }
-[data-testid="stDataFrame"], div[data-testid="stDataFrameResizable"] > div { background: #12082a !important; }
-.stDataFrame th { background: #1a0a35 !important; color: #7c3aed !important; font-size: 0.76rem !important; }
-.stDataFrame td { color: #a78bfa !important; font-size: 0.84rem !important; }
+[data-testid="metric-container"] label { color: #a78bfa !important; font-size: 0.74rem !important; }
+[data-testid="stMetricValue"] { color: #f5d0fe !important; font-size: 1.4rem !important; font-weight: 700 !important; }
+[data-testid="stMetricDelta"] { color: #e879f9 !important; }
+[data-testid="stDataFrame"], div[data-testid="stDataFrameResizable"] > div { background: #1a0a35 !important; }
+.stDataFrame th { background: #2d1a5e !important; color: #c4b5fd !important; font-size: 0.76rem !important; }
+.stDataFrame td { color: #e9d5ff !important; font-size: 0.84rem !important; }
 div[data-baseweb="select"] > div,
-div[data-baseweb="input"] > div { background: #12082a !important; border-color: #2d1a5e !important; color: #ede9fe !important; border-radius: 10px !important; }
-label[data-testid="stWidgetLabel"] p { color: #7c3aed !important; font-size: 0.8rem !important; }
-.stSlider div[role="slider"] { background: #a855f7 !important; }
-div[data-baseweb="radio"] label p { color: #a78bfa !important; }
+div[data-baseweb="input"] > div { background: #1a0a35 !important; border-color: #4c1d95 !important; color: #f5d0fe !important; border-radius: 10px !important; }
+label[data-testid="stWidgetLabel"] p { color: #c4b5fd !important; font-size: 0.8rem !important; }
+.stSlider div[role="slider"] { background: #c084fc !important; }
+div[data-baseweb="radio"] label p { color: #c4b5fd !important; }
 .stButton > button {
-    background: linear-gradient(135deg, #2d1a5e, #3b1070) !important;
-    color: #c084fc !important; border: 1px solid #a855f744 !important;
+    background: linear-gradient(135deg, #4c1d95, #5b21b6) !important;
+    color: #f5d0fe !important; border: 1px solid #c084fc44 !important;
     border-radius: 10px !important; font-weight: 500 !important; transition: all 0.2s !important;
 }
 .stButton > button:hover { background: linear-gradient(135deg, #7c3aed, #9333ea) !important; color: white !important; transform: translateY(-1px) !important; }
 .stButton > button[kind="primary"] { background: linear-gradient(135deg, #7c3aed, #9333ea) !important; color: white !important; border: none !important; }
 .stProgress > div > div { background: linear-gradient(90deg, #a855f7, #e879f9) !important; }
-.stAlert { background: #12082a !important; border-radius: 12px !important; border-color: #2d1a5e !important; color: #a78bfa !important; }
+.stProgress p { color: #e9d5ff !important; }
+[data-testid="stText"] { color: #e9d5ff !important; }
+.stAlert { background: #1a0a35 !important; border-radius: 12px !important; border-color: #4c1d95 !important; color: #c4b5fd !important; }
 #MainMenu, footer, header { visibility: hidden !important; }
 </style>
 """, unsafe_allow_html=True)
@@ -211,7 +208,7 @@ with tab_home:
 
     with col_in:
         st.markdown("<div class='gcard'><h4>📍 Scenario inputs</h4>", unsafe_allow_html=True)
-        zone = st.selectbox("Neighbourhood", list(LA_METER_RATES.keys()), index=4, key="zone_tab1")
+        zone     = st.selectbox("Neighbourhood", list(LA_METER_RATES.keys()), index=4)
         scenario = st.selectbox("Quick scenario", [
             "Regular day, quiet",
             "Busy evening, no event",
@@ -312,7 +309,7 @@ with tab_homeowner:
     with col_l:
         st.markdown("<div class='gcard'><h4>📍 Spot details</h4>", unsafe_allow_html=True)
         owner_name = st.text_input("Your name", value="Alex Johnson")
-        spot_zone  = st.selectbox("Neighbourhood", list(LA_METER_RATES.keys()), index=4, key="zone_tab2")
+        spot_zone  = st.selectbox("Neighbourhood", list(LA_METER_RATES.keys()), index=4)
         st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown("<div class='gcard'><h4>💰 Pricing mode</h4>", unsafe_allow_html=True)
