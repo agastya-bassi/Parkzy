@@ -27,8 +27,8 @@ st.markdown("""
 /* ── reset & base ── */
 html, body, [class*="css"] {
     font-family: 'DM Sans', sans-serif;
-    background-color: #080b14 !important;
-    color: #e2e8f0 !important;
+    background-color: #0a0710 !important;
+    color: #ede9fe !important;
 }
 .block-container {
     padding-top: 1.8rem !important;
@@ -36,53 +36,53 @@ html, body, [class*="css"] {
     max-width: 1120px !important;
     background: transparent !important;
 }
-section[data-testid="stSidebar"] { background: #0d1117 !important; }
+section[data-testid="stSidebar"] { background: #0d0a17 !important; }
 
 /* ── scrollbar ── */
 ::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: #0d1117; }
-::-webkit-scrollbar-thumb { background: #2a3550; border-radius: 4px; }
+::-webkit-scrollbar-track { background: #0d0a17; }
+::-webkit-scrollbar-thumb { background: #3b1f6a; border-radius: 4px; }
 
 /* ── logo / header ── */
 .park-logo {
     font-family: 'Syne', sans-serif;
     font-size: 2rem; font-weight: 800;
-    background: linear-gradient(135deg, #38bdf8 0%, #818cf8 60%, #e879f9 100%);
+    background: linear-gradient(135deg, #c084fc 0%, #a855f7 50%, #e879f9 100%);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     letter-spacing: -0.03em; line-height: 1;
 }
 .park-tagline {
-    font-size: 0.82rem; color: #475569; letter-spacing: 0.06em;
+    font-size: 0.82rem; color: #6b21a8; letter-spacing: 0.06em;
     text-transform: uppercase; margin-top: 2px;
 }
 
 /* ── tabs ── */
 [data-baseweb="tab-list"] {
-    background: #0d1420 !important;
+    background: #12082a !important;
     border-radius: 12px !important;
     padding: 4px !important;
-    border: 1px solid #1e2d45 !important;
+    border: 1px solid #2d1a5e !important;
     gap: 2px !important;
 }
 button[data-baseweb="tab"] {
     font-family: 'DM Sans', sans-serif !important;
     font-size: 0.85rem !important; font-weight: 500 !important;
-    color: #64748b !important;
+    color: #6b21a8 !important;
     border-radius: 8px !important;
     padding: 0.45rem 1.1rem !important;
     transition: all 0.2s !important;
 }
-button[data-baseweb="tab"]:hover { color: #94a3b8 !important; background: #131d2e !important; }
+button[data-baseweb="tab"]:hover { color: #c084fc !important; background: #1a0a35 !important; }
 button[data-baseweb="tab"][aria-selected="true"] {
-    background: linear-gradient(135deg, #1e3a5f, #1a2744) !important;
-    color: #38bdf8 !important;
-    border: 1px solid #2563eb44 !important;
+    background: linear-gradient(135deg, #2d1a5e, #3b1070) !important;
+    color: #e879f9 !important;
+    border: 1px solid #a855f744 !important;
 }
 
 /* ── glass card ── */
 .gcard {
-    background: linear-gradient(135deg, #0d1928 0%, #0a1520 100%);
-    border: 1px solid #1e2d45;
+    background: linear-gradient(135deg, #12082a 0%, #0e0520 100%);
+    border: 1px solid #2d1a5e;
     border-radius: 16px;
     padding: 1.4rem 1.6rem;
     margin-bottom: 1rem;
@@ -92,49 +92,49 @@ button[data-baseweb="tab"][aria-selected="true"] {
 .gcard::before {
     content: '';
     position: absolute; top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, #38bdf822, #818cf833, transparent);
+    background: linear-gradient(90deg, transparent, #a855f733, #e879f922, transparent);
 }
 .gcard h4 {
     font-family: 'Syne', sans-serif;
-    color: #e2e8f0; font-size: 1rem; font-weight: 700;
+    color: #ede9fe; font-size: 1rem; font-weight: 700;
     margin: 0 0 0.6rem 0; letter-spacing: -0.01em;
 }
-.gcard p, .gcard li { color: #94a3b8; font-size: 0.9rem; line-height: 1.65; margin: 0 0 0.5rem 0; }
-.gcard strong { color: #cbd5e1; }
+.gcard p, .gcard li { color: #a78bfa; font-size: 0.9rem; line-height: 1.65; margin: 0 0 0.5rem 0; }
+.gcard strong { color: #ddd6fe; }
 .gcard ul { padding-left: 1.2rem; }
-.gcard .sub { color: #475569; font-size: 0.8rem; margin-top: 0.4rem; }
+.gcard .sub { color: #4c1d95; font-size: 0.8rem; margin-top: 0.4rem; }
 
 /* ── kpi card ── */
 .kpi {
-    background: linear-gradient(135deg, #0d1928, #0a1520);
-    border: 1px solid #1e2d45;
+    background: linear-gradient(135deg, #12082a, #0e0520);
+    border: 1px solid #2d1a5e;
     border-radius: 14px; padding: 1.1rem 1.3rem;
     position: relative; overflow: hidden;
 }
 .kpi::after {
     content: ''; position: absolute;
     bottom: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, #38bdf8, #818cf8);
-    opacity: 0.5;
+    background: linear-gradient(90deg, #a855f7, #e879f9);
+    opacity: 0.6;
 }
 .kpi-val {
     font-family: 'Syne', sans-serif;
-    font-size: 1.9rem; font-weight: 800; color: #f1f5f9;
+    font-size: 1.9rem; font-weight: 800; color: #ede9fe;
     line-height: 1.1; letter-spacing: -0.03em;
 }
-.kpi-label { font-size: 0.75rem; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
-.kpi-delta { font-size: 0.78rem; color: #34d399; margin-top: 3px; }
+.kpi-label { font-size: 0.75rem; color: #6b21a8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+.kpi-delta { font-size: 0.78rem; color: #c084fc; margin-top: 3px; }
 
 /* ── big price ── */
 .big-price {
     font-family: 'Syne', sans-serif;
     font-size: 4rem; font-weight: 800; letter-spacing: -0.04em;
-    background: linear-gradient(135deg, #38bdf8, #818cf8);
+    background: linear-gradient(135deg, #c084fc, #e879f9);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     line-height: 1;
 }
-.price-unit { font-size: 1.1rem; color: #475569; font-weight: 400; }
-.price-label { font-size: 0.75rem; color: #475569; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+.price-unit { font-size: 1.1rem; color: #6b21a8; font-weight: 400; }
+.price-label { font-size: 0.75rem; color: #6b21a8; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
 
 /* ── badges ── */
 .badge {
@@ -142,93 +142,93 @@ button[data-baseweb="tab"][aria-selected="true"] {
     border-radius: 20px; font-size: 0.75rem; font-weight: 600;
     letter-spacing: 0.02em;
 }
-.badge-cyan   { background: #0e2a3a; color: #38bdf8; border: 1px solid #38bdf822; }
-.badge-green  { background: #052e16; color: #34d399; border: 1px solid #34d39922; }
+.badge-cyan   { background: #1a0a35; color: #c084fc; border: 1px solid #a855f733; }
+.badge-green  { background: #0f1a0a; color: #86efac; border: 1px solid #86efac22; }
 .badge-orange { background: #2d1a05; color: #fb923c; border: 1px solid #fb923c22; }
 .badge-red    { background: #2d0505; color: #f87171; border: 1px solid #f8717122; }
-.badge-purple { background: #1a1033; color: #a78bfa; border: 1px solid #a78bfa22; }
+.badge-purple { background: #2d1a5e; color: #e879f9; border: 1px solid #e879f933; }
 
 /* ── section title ── */
 .sec-title {
     font-family: 'Syne', sans-serif;
-    font-size: 1.35rem; font-weight: 700; color: #e2e8f0;
+    font-size: 1.35rem; font-weight: 700; color: #ede9fe;
     letter-spacing: -0.02em; margin-bottom: 2px;
 }
-.sec-sub { font-size: 0.82rem; color: #475569; margin-bottom: 1.2rem; }
+.sec-sub { font-size: 0.82rem; color: #6b21a8; margin-bottom: 1.2rem; }
 
 /* ── divider ── */
 .glowdiv {
     height: 1px; margin: 1.2rem 0;
-    background: linear-gradient(90deg, transparent, #1e3a5f, transparent);
+    background: linear-gradient(90deg, transparent, #4c1d95, transparent);
 }
 
 /* ── event card ── */
 .evcard {
-    background: #0d1928; border: 1px solid #1e2d45;
+    background: #12082a; border: 1px solid #2d1a5e;
     border-radius: 14px; padding: 1rem 1.1rem;
     transition: border-color 0.2s;
 }
-.evcard-hot  { border-color: #ef444433 !important; background: #1a0a0a !important; }
-.evcard-warm { border-color: #f59e0b33 !important; background: #1a1205 !important; }
-.evcard-cool { border-color: #38bdf833 !important; }
-.evcard-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.92rem; color: #e2e8f0; margin: 0 0 4px 0; }
-.evcard-meta { font-size: 0.78rem; color: #475569; margin: 1px 0; }
+.evcard-hot  { border-color: #ef444433 !important; background: #1a0a15 !important; }
+.evcard-warm { border-color: #f59e0b33 !important; background: #1a1005 !important; }
+.evcard-cool { border-color: #a855f733 !important; }
+.evcard-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.92rem; color: #ede9fe; margin: 0 0 4px 0; }
+.evcard-meta { font-size: 0.78rem; color: #6b21a8; margin: 1px 0; }
 
 /* ── notif ── */
 .notif {
     border-radius: 12px; padding: 1rem 1.2rem; margin: 0.5rem 0;
     border-left: 3px solid;
 }
-.notif-high { background: #1a0a0a; border-color: #ef4444; }
-.notif-med  { background: #1a1205; border-color: #f59e0b; }
-.notif strong { color: #e2e8f0; font-family: 'Syne', sans-serif; }
-.notif span   { color: #94a3b8; font-size: 0.88rem; }
+.notif-high { background: #1a0a15; border-color: #ef4444; }
+.notif-med  { background: #1a1005; border-color: #f59e0b; }
+.notif strong { color: #ede9fe; font-family: 'Syne', sans-serif; }
+.notif span   { color: #a78bfa; font-size: 0.88rem; }
 
 /* ── streamlit overrides ── */
 [data-testid="metric-container"] {
-    background: #0d1928 !important;
-    border: 1px solid #1e2d45 !important;
+    background: #12082a !important;
+    border: 1px solid #2d1a5e !important;
     border-radius: 12px !important; padding: 1rem 1.2rem !important;
 }
-[data-testid="metric-container"] label { color: #475569 !important; font-size: 0.75rem !important; }
-[data-testid="stMetricValue"]          { color: #e2e8f0 !important; font-family: 'Syne', sans-serif !important; font-size: 1.5rem !important; }
-[data-testid="stMetricDelta"]          { color: #34d399 !important; }
-[data-testid="stDataFrame"]            { background: #0d1928 !important; border-radius: 12px !important; }
-div[data-testid="stDataFrameResizable"] > div { background: #0d1928 !important; }
-.stDataFrame th { background: #131d2e !important; color: #64748b !important; font-size: 0.78rem !important; }
-.stDataFrame td { color: #94a3b8 !important; font-size: 0.85rem !important; }
+[data-testid="metric-container"] label { color: #6b21a8 !important; font-size: 0.75rem !important; }
+[data-testid="stMetricValue"]          { color: #ede9fe !important; font-family: 'Syne', sans-serif !important; font-size: 1.5rem !important; }
+[data-testid="stMetricDelta"]          { color: #c084fc !important; }
+[data-testid="stDataFrame"]            { background: #12082a !important; border-radius: 12px !important; }
+div[data-testid="stDataFrameResizable"] > div { background: #12082a !important; }
+.stDataFrame th { background: #1a0a35 !important; color: #7c3aed !important; font-size: 0.78rem !important; }
+.stDataFrame td { color: #a78bfa !important; font-size: 0.85rem !important; }
 
 /* inputs */
 div[data-baseweb="select"] > div,
-div[data-baseweb="input"] > div { background: #0d1928 !important; border-color: #1e2d45 !important; color: #e2e8f0 !important; border-radius: 10px !important; }
-label[data-testid="stWidgetLabel"] p { color: #64748b !important; font-size: 0.8rem !important; }
-.stSlider [data-testid="stTickBarMin"], .stSlider [data-testid="stTickBarMax"] { color: #475569 !important; }
-.stSlider div[role="slider"] { background: #38bdf8 !important; }
-div[data-baseweb="radio"] label p { color: #94a3b8 !important; }
+div[data-baseweb="input"] > div { background: #12082a !important; border-color: #2d1a5e !important; color: #ede9fe !important; border-radius: 10px !important; }
+label[data-testid="stWidgetLabel"] p { color: #7c3aed !important; font-size: 0.8rem !important; }
+.stSlider [data-testid="stTickBarMin"], .stSlider [data-testid="stTickBarMax"] { color: #6b21a8 !important; }
+.stSlider div[role="slider"] { background: #a855f7 !important; }
+div[data-baseweb="radio"] label p { color: #a78bfa !important; }
 
 /* buttons */
 .stButton > button {
-    background: linear-gradient(135deg, #1e3a5f, #1e2d5f) !important;
-    color: #38bdf8 !important; border: 1px solid #2563eb44 !important;
+    background: linear-gradient(135deg, #2d1a5e, #3b1070) !important;
+    color: #c084fc !important; border: 1px solid #a855f744 !important;
     border-radius: 10px !important; font-family: 'DM Sans', sans-serif !important;
     font-weight: 500 !important; transition: all 0.2s !important;
 }
 .stButton > button:hover {
-    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    background: linear-gradient(135deg, #7c3aed, #9333ea) !important;
     color: white !important; border-color: transparent !important;
     transform: translateY(-1px) !important;
 }
 .stButton > button[kind="primary"] {
-    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    background: linear-gradient(135deg, #7c3aed, #9333ea) !important;
     color: white !important; border: none !important;
 }
 .stButton > button[kind="primary"]:hover { opacity: 0.9 !important; }
 
 /* progress bar */
-.stProgress > div > div { background: linear-gradient(90deg, #38bdf8, #818cf8) !important; }
+.stProgress > div > div { background: linear-gradient(90deg, #a855f7, #e879f9) !important; }
 
 /* info / success */
-.stAlert { background: #0d1928 !important; border-radius: 12px !important; border-color: #1e2d45 !important; color: #94a3b8 !important; }
+.stAlert { background: #12082a !important; border-radius: 12px !important; border-color: #2d1a5e !important; color: #a78bfa !important; }
 
 /* hide branding */
 #MainMenu, footer, header { visibility: hidden !important; }
@@ -276,7 +276,7 @@ with tab_home:
 
     with col_in:
         st.markdown("<div class='gcard'><h4>📍 Scenario inputs</h4>", unsafe_allow_html=True)
-        zone = st.selectbox("Neighbourhood", list(LA_METER_RATES.keys()), index=4, key="zone_tab1")
+        zone     = st.selectbox("Neighbourhood", list(LA_METER_RATES.keys()), index=4)
         scenario = st.selectbox("Quick scenario", [
             "Regular day, quiet",
             "Busy evening, no event",
@@ -377,7 +377,7 @@ with tab_homeowner:
     with col_l:
         st.markdown("<div class='gcard'><h4>📍 Spot details</h4>", unsafe_allow_html=True)
         owner_name = st.text_input("Your name", value="Alex Johnson")
-        spot_zone = st.selectbox("Neighbourhood", list(LA_METER_RATES.keys()), index=4, key="zone_tab2")
+        spot_zone  = st.selectbox("Neighbourhood", list(LA_METER_RATES.keys()), index=4)
         st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown("<div class='gcard'><h4>💰 Pricing mode</h4>", unsafe_allow_html=True)
